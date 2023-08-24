@@ -326,9 +326,7 @@ const cacheManager = require('./jsb-cache-manager');
     };
 
     skeleton.setSkeletonData = function (skeletonData) {
-        if (null != skeletonData.width && null != skeletonData.height && 0 !== skeletonData.width && 0 !== skeletonData.height) {
-            this.node.setContentSize(skeletonData.width, skeletonData.height);
-        }
+        null != skeletonData.width && null != skeletonData.height && this.node.setContentSize(skeletonData.width, skeletonData.height);
 
         let uuid = skeletonData._uuid;
         if (!uuid) {
@@ -818,4 +816,11 @@ const cacheManager = require('./jsb-cache-manager');
         }
         this._attachUtilNative.associateAttachedNode(this._skeleton, this._skeletonNode._proxy);
     };
+    skeleton.updateRegion = function(slotsName, jsbTex2d){
+        if(this._nativeSkeleton){
+            this._nativeSkeleton.updateRegion(slotsName, jsbTex2d);
+            return true;
+        }
+        return false;
+    };    
 })();

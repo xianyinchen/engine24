@@ -102,7 +102,7 @@ namespace spine {
         void setVertexEffectDelegate(VertexEffectDelegate* effectDelegate);
         /* Sets the range of slots that should be rendered. Use -1, -1 to clear the range */
         void setSlotsRange(int startSlotIndex, int endSlotIndex);
-
+        void updateRegion(const std::string& slotName, cocos2d::middleware::Texture2D* texture);
         /**
          * @return debug data,it's a Float32Array,
          * format |debug bones length|[beginX|beginY|toX|toY|...loop...]

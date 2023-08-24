@@ -50,6 +50,7 @@
 #include "cocos2d.h"
 #include "cocos/editor-support/spine/spine.h"
 #include "cocos/editor-support/spine-creator-support/spine-cocos2dx.h"
+#include "cocos/editor-support/spine-creator-support/AttachmentVertices.h"
 
 using namespace cocos2d;
 
@@ -300,6 +301,29 @@ static bool js_register_spine_retainSkeletonData(se::State& s)
 }
 SE_BIND_FUNC(js_register_spine_retainSkeletonData)
 
+static bool js_register_spine_updateRegion(se::State& s) {
+    spine::SkeletonRenderer* cobj = (spine::SkeletonRenderer*)s.nativeThisObject();
+
+    const auto& args = s.args();
+    int argc = (int)args.size();
+    if (argc != 2) {
+        SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", argc, 1);
+        return false;
+    }
+    bool ok = false;
+
+    std::string slotName;
+    ok &= seval_to_std_string(args[0], &slotName);
+
+    middleware::Texture2D* texture = nullptr;
+    ok &= seval_to_native_ptr(args[1], &texture);
+
+    cobj->updateRegion(slotName, texture);
+
+    return true;
+}
+SE_BIND_FUNC(js_register_spine_updateRegion)
+
 bool register_all_spine_manual(se::Object* obj)
 {
     // Get the ns
@@ -311,7 +335,8 @@ bool register_all_spine_manual(se::Object* obj)
         obj->setProperty("spine", nsVal);
     }
     se::Object* ns = nsVal.toObject();
-    
+
+    __jsb_spine_SkeletonRenderer_proto->defineFunction("updateRegion", _SE(js_register_spine_updateRegion));
     ns->defineFunction("initSkeletonRenderer", _SE(js_register_spine_initSkeletonRenderer));
     ns->defineFunction("initSkeletonData", _SE(js_register_spine_initSkeletonData));
     ns->defineFunction("retainSkeletonData", _SE(js_register_spine_retainSkeletonData));
