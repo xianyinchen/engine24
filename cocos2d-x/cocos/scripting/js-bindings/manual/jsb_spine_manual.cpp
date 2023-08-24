@@ -65,7 +65,7 @@ bool Map_string_key_to_seval(const std::map<std::string, T*>& v, se::Value* ret)
     se::Value tmp;
     for (const auto& e : v)
     {
-        native_ptr_to_seval<T>(e.second, &tmp);
+        native_ptr_to_rooted_seval<T>(e.second, &tmp);
         obj->setProperty(e.first.c_str(), tmp);
     }
 
